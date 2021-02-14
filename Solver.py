@@ -37,9 +37,27 @@ def plot_board(bo):
             # If confused and thinking should check for j == 9 remember that python starts indexing at 0.  
             # So 8 is the position of the 9th number!
             if j == 8:
+                # Default for print is to do a carriage return, which we want at the end of the board (the 9th position).
                 print(bo[i][j])
             # The else statement below is what actually prints the numbers in the board.
             else:
                 print(str(bo[i][j]) + " ", end="")
 
-plot_board(board)
+def check_empty(bo):
+    '''This function checks which indexes are empty (equals 0) in 
+    a 2d array of values that is being used in this script to solve a sudoku board.'''
+    for i in range(len(bo)):
+        for j in range(len(bo[i])):
+
+            if bo[i][j] == 0:   # Check if empty.
+
+                # return the indices of that empty value.
+                return (i,j)    # where i represents row index number and j represents the column index number.
+
+checker = check_empty(board)
+
+
+# class Board():
+
+#     def __init__(self):
+#         self.board = board
