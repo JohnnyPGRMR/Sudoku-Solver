@@ -101,5 +101,3 @@ def parse_grid(grid):
             return False    ## Fail if we can't assign d (digit) to square s.
         return values
 
-x = parse_grid(test_board)
-print(x)
