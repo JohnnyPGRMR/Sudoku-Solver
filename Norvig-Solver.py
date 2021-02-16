@@ -26,16 +26,16 @@ squares = cross(rows,cols)
 # Generate a list of all the units for each square in the board.  
 # Each square has a row, column, & square associated with it.
 
-            # First line works because "cols" is a string of integers and rows
-            # is a string of letters, running the cross function on them 
-            # generates the rows making up the board.
+# First line works because "cols" is a string of integers and rows is a string 
+# of letters, running the cross function on them generates the rows making up 
+# the board.
 unit_list = ([cross(rows,c) for c in cols] + 
-            # Second line works because "rows" (which is being iterated through) 
-            # is a string of letters, and "cols" is a string of integers.
-            # Running the cross function on them generates a list for each column in the board.
+# Second line works because "rows" (which is being iterated through)is a string 
+# of letters, and "cols" is a string of integers.  Running the cross function 
+# on them generates a list for each column in the board.
             [cross(r, cols) for r in rows] + 
-            # Third line generates nested lists where each list is one of the 
-            # squares making up the board.
+# Third line generates nested lists where each list is one of the squares 
+# making up the board.
             [cross(rs, cs) for rs in ('ABC','DEF','GHI') for cs in ('123', '456', '789')])
 
 # Create a dictionary with each square as the key, and each unit, 
@@ -101,3 +101,30 @@ def parse_grid(grid):
             return False    ## Fail if we can't assign d (digit) to square s.
         return values
 
+def display(values):
+    '''Display these values as a 2-D grid.'''
+    width = 1 + max(len(values[s]) for s in squares)
+    line = '+'.join(['-'*(width*3)]*3)
+    for r in rows:
+        print(''.join(values[r+c].center(width) + ('|' if c in '36' else '') for c in cols))
+        if r in 'CF':
+            print(line)
+    print()
+
+def some(seq):
+    '''Return some element of seq that is true.'''
+    for e in seq:
+        if e:
+            return e
+    return False
+    
+def search(values):
+    '''Using depth-first search and propagation, try all possible values.'''
+    if values is False:
+        return False ## Failed earlier.
+    if all(len(values[s]) == 1 for s in squares):
+        return values  ## Solved!
+    ## Choose the unfilled square s with the fewest possibilities.
+    n,s = min((len(values[s]),s) for s in squares if len(values[s]) > 1)
+    return some(search(assign(values.copy(), s, d))
+        for d in values[s])
